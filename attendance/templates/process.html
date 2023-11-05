@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+        body {
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+        header {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .get_data{
+            margin-top:20px;
+            font-size:18px;
+            padding-left:32px;
+            padding-right:32px;
+        }
+</style>
+<body>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+        <a class="navbar-brand" href="#">The MenTaLs</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                  <a class="nav-link " aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/registration">Registration</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/scanning">Event_Creation</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="/process">Scanning_Data</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/create_pdf">Pdf-Creation</a>
+                </li>
+          </ul>
+          <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+</nav>
+<header>
+    {%csrf_token%}
+    <h3>Here Is the Info of the event that we are going to store the data</h3>
+    <h4>File-Name -- > {{file_name}}</h4>
+    <h4>Event-Name -- > {{event_name}}</h4>
+    <h4>Date -- > {{date}}</h4>
+    <h4>Venue -- > {{venue}}</h4>
+    <button type="button" class="btn btn-primary form-group get_data" id="get_data">Get_Data</button>
+    <ul id="message-list">
+    </ul>
+</header>
+</body>
+<script>
+    function addMessageToList(message) {
+            var messageList = document.getElementById('message-list');
+            var listItem = document.createElement('li');
+            listItem.textContent = message;
+            messageList.appendChild(listItem);
+        }
+    var button = document.getElementById("get_data");
+    button.addEventListener("click", function() {
+            var url = "http://192.168.225.13:8000/get_messages/";
+            fetch(url)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                var messages = data.messages;
+                    var messageList = document.getElementById('message-list');
+                    messageList.innerHTML = '';
+                    messages.forEach(function(message) {
+                        addMessageToList(message);
+                    });
+            });
+    });
+</script>
+</html>
